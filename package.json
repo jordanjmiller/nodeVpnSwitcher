@@ -1,5 +1,5 @@
 {
-  "name": "nodeVpnSwitcher",
+  "name": "node_vpn_switcher",
   "version": "1.0.0",
   "description": "Change PIA VPN server with nodeJS",
   "main": "index.js",
