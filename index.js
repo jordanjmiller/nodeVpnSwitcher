@@ -35,23 +35,32 @@ const piaEnableBackground = () => {
 
 const piaLogin = () => {
     console.log('piaLogin firing');
-    exec(`${windowsPIAString} login ${loginFile}`, (error, stdout, stderr) => {
-        if (error) { 
-            if (error.message.includes('Already logged into account')){ console.log('piaLogin: Already logged into PIA'); return true; }
-            else{ console.log(`piaLogin error: ${error.message}`); return false; }
-        }
-        if (stderr) { console.log(`piaLogin stderr: ${stderr}`); return false; }
-        console.log('piaLogin success, stdout:', stdout);
-        return true;
+    return new Promise(function(resolve, reject) { 
+        exec(`${windowsPIAString} login ${loginFile}`, (error, stdout, stderr) => {
+            if (error) { 
+                if (error.message.includes('Already logged into account')){ console.log('piaLogin: Already logged into PIA'); resolve(true); return; }
+                else{ console.log(`piaLogin error: ${error.message}`); reject(error.message); return; }
+            }
+            if (stderr) { console.log(`piaLogin stderr: ${stderr}`); reject(stderr); return; }
+            console.log('piaLogin success, stdout:', stdout);
+            resolve(true);
+        });
     });
 }
 
-const piaSetup = () => {
+const piaConnect = (region) => {
+
+}
+
+const piaSetup = async () => {
     //check if logged in, log in if not
-    if (piaLogin()){
+    if (await piaLogin()){
         //enable PIA running in the background without the PIA GUI running
+        piaEnableBackground();
         //get array of regions
+        piaGetRegions();
         //connect to first region
+
         //verify connection status and return
     }
     else { console.log('piaSetup error: not logged in'); }
