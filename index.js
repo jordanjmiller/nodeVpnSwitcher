@@ -52,10 +52,22 @@ const piaLogin = () => {
     });
 }
 
-const piaConnect = (region) => {
-    console.log('piaConnect firing, region:', region);
+const piaSetRegion = (region) => {
+    console.log('piaSetRegion firing, region:', region);
     return new Promise(function(resolve, reject) { 
-        exec(`${windowsPIAString} connect ${region}`, (error, stdout, stderr) => {
+        exec(`${windowsPIAString} set region ${region}`, (error, stdout, stderr) => {
+            if (error) { reject(Error(`piaSetRegion error: ${error.message}`)); return; }
+            if (stderr) { reject(Error(`piaSetRegion stderr: ${stderr}`)); return; }
+            console.log('piaSetRegion success, stdout:', stdout);
+            resolve(true);
+        });
+    });
+}
+
+const piaConnect = () => {
+    console.log('piaConnect firing');
+    return new Promise(function(resolve, reject) { 
+        exec(`${windowsPIAString} connect`, (error, stdout, stderr) => {
             if (error) { reject(Error(`piaConnect error: ${error.message}`)); return; }
             if (stderr) { reject(Error(`piaConnect stderr: ${stderr}`)); return; }
             console.log('piaConnect success, stdout:', stdout);
@@ -72,8 +84,10 @@ const piaSetup = async () => {
         await piaEnableBackground();
         //get array of regions
         await piaGetRegions();
+        //set first region
+        await piaSetRegion(regions[0]);
         //connect to first region
-        await piaConnect(regions[0]);
+        await piaConnect();
         //verify connection status and return
     }
     catch(err){ console.log('piaSetup error:', err)}
