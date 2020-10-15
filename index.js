@@ -49,7 +49,15 @@ const piaLogin = () => {
 }
 
 const piaConnect = (region) => {
-
+    console.log('piaConnect firing, region:', region);
+    return new Promise(function(resolve, reject) { 
+        exec(`${windowsPIAString} connect ${region}`, (error, stdout, stderr) => {
+            if (error) { console.log(`piaConnect error: ${error.message}`); return false; }
+            if (stderr) { console.log(`piaConnect stderr: ${stderr}`); reject(stderr); return; }
+            console.log('piaConnect success, stdout:', stdout);
+            resolve(true);
+        });
+    });
 }
 
 const piaSetup = async () => {
@@ -60,7 +68,7 @@ const piaSetup = async () => {
         //get array of regions
         piaGetRegions();
         //connect to first region
-
+        await piaConnect(regions[0]);
         //verify connection status and return
     }
     else { console.log('piaSetup error: not logged in'); }
