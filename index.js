@@ -33,7 +33,10 @@ const enableBackground = () => {
 
 const piaLogin = () => {
     exec(`${windowsPIAString} login ${loginFile}`, (error, stdout, stderr) => {
-        if (error) { console.log(`piaLogin error: ${error.message}`); return false; }
+        if (error) { 
+            if (error.message.includes('Already logged into account')){ console.log('piaLogin: Already logged into PIA'); return true; }
+            else{ console.log(`piaLogin error: ${error.message}`); return false; }
+        }
         if (stderr) { console.log(`piaLogin stderr: ${stderr}`); return false; }
         console.log('piaLogin success, stdout:', stdout);
         return true;
