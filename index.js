@@ -84,8 +84,9 @@ const piaConnect = (region) => {
 }
 
 const piaSetup = async () => {
-    //check if logged in, log in if not
-    if (await piaLogin()){
+    try{
+        //check if logged in, log in if not
+        await piaLogin()
         //enable PIA running in the background without the PIA GUI running
         await piaEnableBackground();
         //get array of regions
@@ -94,7 +95,7 @@ const piaSetup = async () => {
         await piaConnect(regions[0]);
         //verify connection status and return
     }
-    else { console.log('piaSetup error: not logged in'); }
+    catch(err){ console.log('piaSetup error:', err)}
 }
 
 piaSetup();
