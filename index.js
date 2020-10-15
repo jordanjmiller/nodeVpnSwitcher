@@ -8,23 +8,10 @@ let regions = '';
 
 const piaGetRegions = () => {
     console.log('piaGetRegions firing');
-    // exec(`${windowsPIAString} get regions`, (error, stdout, stderr) => {
-    //     if (error) { console.log(`piaGetRegions error: ${error.message}`); return false; }
-    //     if (stderr) { console.log(`piaGetRegions stderr: ${stderr}`); return false; }
-    //     const stdArray = stdout.split("\n");
-
-    //     // remove 'auto' as an option
-    //     const index = stdArray.indexOf('auto');
-    //     if (index > -1) { stdArray.splice(index, 1); }
-
-    //     regions = [...stdArray];
-    //     console.log(`piaGetRegions success, ${regions.length} regions found`);
-    //     return true;
-    // });
     return new Promise(function(resolve, reject) { 
         exec(`${windowsPIAString} get regions`, (error, stdout, stderr) => {
-            if (error) { console.log(`piaGetRegions error: ${error.message}`); reject(error.message); return; }
-            if (stderr) { console.log(`piaGetRegions stderr: ${stderr}`); reject(stderr); return; }
+            if (error) { reject(Error(`piaGetRegions error: ${error.message}`)); return; }
+            if (stderr) { reject(Error(`piaGetRegions stderr: ${stderr}`)); return; }
             const stdArray = stdout.split("\n");
     
             // remove 'auto' as an option
@@ -40,16 +27,10 @@ const piaGetRegions = () => {
 
 const piaEnableBackground = () => {
     console.log('piaEnableBackground firing');
-    // exec(`${windowsPIAString} background enable`, (error, stdout, stderr) => {
-    //     if (error) { console.log(`piaEnableBackground error: ${error.message}`); return false; }
-    //     if (stderr) { console.log(`piaEnableBackground stderr: ${stderr}`); return false; }
-    //     console.log('piaEnableBackground success, stdout:', stdout);
-    //     return true;
-    // });
     return new Promise(function(resolve, reject) { 
         exec(`${windowsPIAString} background enable`, (error, stdout, stderr) => {
-            if (error) { console.log(`piaEnableBackground error: ${error.message}`); reject(error.message); return; }
-            if (stderr) { console.log(`piaEnableBackground stderr: ${stderr}`); reject(stderr); return; }
+            if (error) { reject(Error(`piaEnableBackground error: ${error.message}`)); return; }
+            if (stderr) { reject(Error(`piaEnableBackground stderr: ${stderr}`)); return; }
             console.log('piaEnableBackground success, stdout:', stdout);
             resolve(true);
         });
@@ -62,9 +43,9 @@ const piaLogin = () => {
         exec(`${windowsPIAString} login ${loginFile}`, (error, stdout, stderr) => {
             if (error) { 
                 if (error.message.includes('Already logged into account')){ console.log('piaLogin: Already logged into PIA'); resolve(true); return; }
-                else{ console.log(`piaLogin error: ${error.message}`); reject(error.message); return; }
+                else{ reject(Error(`piaLogin error: ${error.message}`)); return; }
             }
-            if (stderr) { console.log(`piaLogin stderr: ${stderr}`); reject(stderr); return; }
+            if (stderr) { reject(Error(`piaLogin stderr: ${stderr}`)); return; }
             console.log('piaLogin success, stdout:', stdout);
             resolve(true);
         });
@@ -75,8 +56,8 @@ const piaConnect = (region) => {
     console.log('piaConnect firing, region:', region);
     return new Promise(function(resolve, reject) { 
         exec(`${windowsPIAString} connect ${region}`, (error, stdout, stderr) => {
-            if (error) { console.log(`piaConnect error: ${error.message}`); reject(error.message); return; }
-            if (stderr) { console.log(`piaConnect stderr: ${stderr}`); reject(stderr); return; }
+            if (error) { reject(Error(`piaConnect error: ${error.message}`)); return; }
+            if (stderr) { reject(Error(`piaConnect stderr: ${stderr}`)); return; }
             console.log('piaConnect success, stdout:', stdout);
             resolve(true);
         });
