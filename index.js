@@ -13,11 +13,13 @@ const piaGetRegions = () => {
             if (error) { reject(Error(`piaGetRegions error: ${error.message}`)); return; }
             if (stderr) { reject(Error(`piaGetRegions stderr: ${stderr}`)); return; }
             const stdArray = stdout.split("\n");
-    
+            
+            //remove whitespace
+            for (let i = 0; i < stdArray.length; i++){stdArray[i] = stdArray[i].trim();}
+
             // remove 'auto' as an option
-            const index = stdArray.indexOf('auto');
-            if (index > -1) { stdArray.splice(index, 1); }
-            regions = [...stdArray];
+            const filtered = stdArray.filter(region=>{return region !== 'auto'});
+            regions = [...filtered];
 
             console.log(`piaGetRegions success, ${regions.length} regions found`);
             resolve(true);
