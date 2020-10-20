@@ -31,7 +31,7 @@ const piaEnableBackground = () => {
         exec(`${windowsPIAString} background enable`, (error, stdout, stderr) => {
             if (error) { reject(Error(`piaEnableBackground error: ${error.message}`)); return; }
             if (stderr) { reject(Error(`piaEnableBackground stderr: ${stderr}`)); return; }
-            console.log('piaEnableBackground success, stdout:', stdout);
+            console.log('piaEnableBackground success');
             resolve(true);
         });
     });
@@ -58,7 +58,7 @@ const piaSetRegion = (region) => {
         exec(`${windowsPIAString} set region ${region}`, (error, stdout, stderr) => {
             if (error) { reject(Error(`piaSetRegion error: ${error.message}`)); return; }
             if (stderr) { reject(Error(`piaSetRegion stderr: ${stderr}`)); return; }
-            console.log('piaSetRegion success, stdout:', stdout);
+            console.log('piaSetRegion success, region set to:', region);
             resolve(true);
         });
     });
@@ -70,7 +70,7 @@ const piaConnect = () => {
         exec(`${windowsPIAString} connect`, (error, stdout, stderr) => {
             if (error) { reject(Error(`piaConnect error: ${error.message}`)); return; }
             if (stderr) { reject(Error(`piaConnect stderr: ${stderr}`)); return; }
-            console.log('piaConnect success, stdout:', stdout);
+            console.log('piaConnect success');
             resolve(true);
         });
     });
